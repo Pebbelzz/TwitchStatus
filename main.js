@@ -1,74 +1,52 @@
-var info  = [];
-var data = {};
-var feeds = ["freecodecamp", "storbeck", "habathcx","RobotCaleb","noobs2ninjas","beohoff","esl_sc2"]
-var link = '';
-var mainApiUrl = 'https://api.twitch.tv/kraken/';
-var logo = '';
-/*
-  function createURL(type, feed){
-    return mainApiUrl + type + '/' + feed + '?callback=?'
-  };
+var streamers = ["freecodecamp", "storbeck", "terakilobyte", "habathcx","RobotCaleb","thomasballinger","noobs2ninjas","beohoff", "cretetion","TR7K","OgamingSC2","ESL_SC2"];
 
+function getChannelInfo() {
+  streamers.forEach(function(channel) {
+    function createURL(type, name) {
+      return 'https://api.twitch.tv/kraken/' + type + '/' + name + '?callback=?';
+    };
 
-feeds.forEach(function(stream){
-  $.getJSON.(createURL('streams', feed), function(data){
-    console.log(data);
-  });
-});
-*/
+    $.getJSON(createURL("streams", channel), function(data) {
+      var streaming,
+          status;
+      if (data.stream) {
+        streaming = data.stream.game;
+        status = "online";
+      }
+      else {
+        streaming = "Offline";
+        status = "online";
+      };
 
-feeds.forEach(function(stream){
-  $.getJSON(mainApiUrl + 'streams/'  + stream + '?callback=?', function(data){
-    console.log(stream);
-    console.log(data);
-    console.log(data._links);
-    if(data.stream == null){
-      $('#name').append('<div id="offline"><p>' + stream + '<br> ' + data._links.channel + '<br> Offline</div>');
-    }
-    else{
-      $('#name').append('<div id="online"><p>' + stream + '<br> ' + data.stream._links.self + '<br> Online</div>');
-    }
-  });
+      $.getJSON(createURL("channels", channel), function(data) {
 
-  //only setting logo variable within the function
-  $.getJSON(mainApiUrl + 'channels/' + stream + '?callback?', function(channel){
-    console.log(channel);
-    logo = channel.logo;
-  })
-  console.log(logo);
-});
-
-/*
-$(document).ready(function(){
-  for(i=0; i<feeds.length; i++){
-
-    $.getJSON('https://api.twitch.tv/kraken/streams/'+ feeds[i] +'?callback=?', function(data) {
-    link = data._links.self;
-    console.log(data);
-    $('#test').append('<div id="link">' + data._links.self + '</div><br>');
-    console.log(data._links.self);
-    console.log(link);
-
-    //dataToPage(data, feeds[i]);
+        var logo = data.logo != null ? data.logo : "http://dummyimage.com/50x50/ecf0e7/5c5457.jpg&text=0x3F",
+          name = data.display_name != null ? data.display_name : channel,
+          description = status === "online" ? ': ' + data.status : "";
+          html = '<div class="row ' + status + '"><div id="icon"><img src="' +
+          logo + '" class="logo"></div><div id="name"><a href="' + data.url + '" target="_blank">' +
+          name + '</a></div><div id="streaming">'+ streaming + '<span>' +
+          description + '</span></div></div>';
+        status === "online" ? $("#display").prepend(html) : $("#display").append(html);
+      });
     });
-    console.log(i);
-    console.log(link);
-    currentFeed = feeds[i];
-    console.log(currentFeed);
-    $('#name').append(currentFeed + '<br>');
-  }
-});
-
-function dataToPage(data, currentFeed){
-  console.log(data._links);
-  console.log(data._links.self);
-  $('#test').append('<div id="userName">' + currentFeed + '</div><div id="link">' + data._links.self + '</div><br>');
-  console.log(data.stream);
-  if(data.stream != null){
-    $('#preview').append('<img src="' + (data.stream.preview.small) + '" /><br>');
-  };
-  if(data.stream == null){
-    $('#preview').append('Offline <br>');
-  };
+  });
 };
-*/
+
+$(document).ready(function() {
+  getChannelInfo();
+  $(".selector").click(function() {
+    $(".selector").removeClass("active");
+    $(this).addClass("active");
+    var status = $(this).attr('id');
+    if (status === "all") {
+      $(".online, .offline").removeClass("hidden");
+    } else if (status === "online") {
+      $(".online").removeClass("hidden");
+      $(".offline").addClass("hidden");
+    } else {
+      $(".offline").removeClass("hidden");
+      $(".online").addClass("hidden");
+    }
+  })
+});
