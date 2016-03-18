@@ -24,7 +24,7 @@ function getChannelInfo() {
           name = data.display_name != null ? data.display_name : channel,
           description = status === "online" ? ': ' + data.status : "";
           html = '<div class="row ' + status + '"><div id="icon"><img src="' +
-          logo + '" class="logo"></div><div id="name"><a href="' + data.url + '" target="_blank">' +
+          logo + '" id="pic"></div><div id="name"><a href="' + data.url + '" target="_blank">' +
           name + '</a></div><div id="streaming">'+ streaming + '<span>' +
           description + '</span></div></div>';
         status === "online" ? $("#display").prepend(html) : $("#display").append(html);
