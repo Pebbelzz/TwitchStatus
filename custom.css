@@ -1,13 +1,58 @@
-#online_status{
-  color: green;
-}
-
-#offline_status{
-  color: red;
-}
 
 #pic{
   border-radius: 50%;
   height: 100px;
   width: 100px;
+}
+
+#wrapper{
+
+  max-width: 80%;
+  margin: 0 auto;
+}
+
+.channel{
+  margin-top: 10px;
+}
+
+#display{
+  width: 90%;
+  margin: 0 auto;
+}
+
+#icon{
+  width: 20%;
+  display: inline-block;
+}
+
+#icon  img{
+  margin: 0 auto;
+  display: block;
+}
+
+#infoWrapper{
+  width: 70%;
+  display: inline-block;
+  margin: 0 auto;
+}
+
+#name{
+  height: 50px;
+  line-height: 50px;
+}
+
+#name a{
+  font-size: 24px;
+  font-weight: bold;
+  color: #6441a5;
+  text-decoration: none;
+}
+
+#streaming{
+  height: 40px;
+  line-height: 40px;
+}
+
+#Offlinetext{
+  color: red;
 }
